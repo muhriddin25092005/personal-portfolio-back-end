@@ -26,6 +26,10 @@ app.use("/api/skills", skills);
 app.use("/api/category", category);
 app.use("/api/contacts", contact);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 // connect database
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })
@@ -35,3 +39,6 @@ mongoose
 app.listen(process.env.PORT, () =>
   console.log(`server is running on port ${process.env.PORT}`)
 );
+
+module.exports = app;
+module.exports.handler = serverlessHttp(app);

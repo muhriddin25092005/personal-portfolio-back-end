@@ -26,6 +26,10 @@ app.use("/api/skills", skills);
 app.use("/api/category", category);
 app.use("/api/contacts", contact);
 
+app.get("/", (req, res) => {
+  res.send("hello api");
+});
+
 // connect database
 mongoose
   .connect(process.env.MONGO_URL, { useNewUrlParser: true })

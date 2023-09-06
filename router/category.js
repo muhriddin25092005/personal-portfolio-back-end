@@ -18,15 +18,13 @@ router.post("/add", async (req, res) => {
   try {
     const { category } = req.body;
 
-    const categoriesDoc = await Categories.findOne({}); // Biz yagona hujjatni olamiz
-    if (!categoriesDoc) {
-      return res.status(404).json({ message: "Categories not found." });
+    if (!category) {
+      res.status(404).json({ message: "this category not found" });
+      return;
     }
 
-    categoriesDoc.category.push(category);
-    await categoriesDoc.save();
-
-    res.status(200).json({ message: "Category added!", data: categoriesDoc });
+    const newCategory = await Categories.create({ category });
+    res.status(200).json({ message: "success", category: newCategory });
   } catch (error) {
     res.send(error);
   }
@@ -42,7 +40,23 @@ router.get("/:name", async (req, res) => {
       return;
     }
 
-    res.status(200).json({ message: "success", categoryProject });
+    res.status(200).json({ message: "success", category: categoryProject });
+  } catch (error) {
+    res.send(error);
+  }
+});
+
+// delete category
+router.delete("/delete/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      res.status(404).json({ message: "not found" });
+    }
+
+    await Categories.findByIdAndRemove(id);
+    res.status(200).json({ message: "this category deleted" });
   } catch (error) {
     res.send(error);
   }

@@ -19,12 +19,14 @@ router.post("/add", async (req, res) => {
     const { category } = req.body;
 
     if (!category) {
-      res.status(404).json({ message: "this category not found" });
+      res.status(404).json({ message: "category not found" });
       return;
     }
 
-    const newCategory = await Categories.create({ category });
-    res.status(200).json({ message: "success", category: newCategory });
+    const newCategory = await Categories.create({
+      category: category,
+    });
+    res.status(200).json({ message: "success", newCategory });
   } catch (error) {
     res.send(error);
   }
@@ -37,6 +39,12 @@ router.get("/:name", async (req, res) => {
     const categoryProject = await Project.find({ category: name });
     if (!categoryProject) {
       res.status(404).json({ message: "project not found" });
+      return;
+    }
+
+    if (name === "all") {
+      const allProject = await Project.find({});
+      res.status(200).json({ message: "success", category: allProject });
       return;
     }
 
